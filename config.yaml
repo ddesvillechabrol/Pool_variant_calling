@@ -1,0 +1,16 @@
+# Files ------------------------------------------------------------------------
+
+ref: ERR035980_1.fastq.gz
+
+fastq_dir: ./Fastq/
+
+assembly: reference.fa
+
+output: variant_calling.out
+
+
+# Pipeline output --------------------------------------------------------------
+
+pipeline_output:
+    path: ./pipeline.output.py
+    params: []
