@@ -1,16 +1,20 @@
+# Script path ------------------------------------------------------------------
+# Path of the pool_variant_calling directory
+script_path: /pasteur/homes/ddesvill/pool_variant_calling/
+
 # Files ------------------------------------------------------------------------
-
+# Fastq of the pure sample
 ref: ERR035980_1.fastq.gz
-
+# Directory with all fastq of the pools sample
 fastq_dir: ./Fastq/
-
+# Fasta file of your reference
 assembly: reference.fa
-
-output: variant_calling.out
+# The final output
+output: variant_calling_result.txt
 
 
 # Pipeline output --------------------------------------------------------------
-
+# If you have a prokka file add inside params.
+# params: ["--annotation path/to/file.gbf"]
 pipeline_output:
-    path: ./pipeline.output.py
     params: []
