@@ -16,12 +16,13 @@ Example
 ========
 
 First of all, you must modify config file for your data. You have an example called config.yaml.
-This pipeline is developed for the bic cluster at Institut Pasteur.
+This pipeline is developed for the cluster of Institut Pasteur.
 If you want to use it on other computer, you will need to change path in bash wrapper.
 
 ::
 
+    module load snakemake
     /local/gensoft2/exe/snakemake/3.5.4/bin/snakemake -p -s path/to/Snakefile --configfile path/to/config.yaml \
     --cluster "qsub -q pf4 -cwd -V -b y" --jobs 5
 
-
+The command runs the workflow on the bic cluster.
