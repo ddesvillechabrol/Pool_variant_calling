@@ -5,11 +5,12 @@ from os.path import join
 configfile: "config.yaml"
 
 # Define some global variable --------------------------------------------------
+get_prefixes = lambda filename: filename.split(".")[0]
+REF = get_prefixes(config["ref"])
 
 SPATH = config["script_path"]
 FASTQ_DIR = config["fastq_dir"]
 SAMPLES, = glob_wildcards(join(FASTQ_DIR, '{sample,[^/]+}.fastq.gz'))
-REF = config["ref"]
 CONTIGS = config["assembly"]
 OUTPUT = config["output"]
 
@@ -32,7 +33,7 @@ rule bwa_sample:
 
 rule bwa_ref:
     input:
-        fastq = REF,
+        fastq = config["ref"],
         contigs = CONTIGS
     output:
         prefix = "mapped_ref/" + REF,
