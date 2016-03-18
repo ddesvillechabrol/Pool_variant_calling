@@ -45,7 +45,6 @@ extract_name(){
     echo $name
 }
 
-MUTECT=/local/gensoft/exe/muTect/1.1.4/bin/muTect
 HELP=$(grep "^## " "${BASH_SOURCE[0]}" | cut -c 4-)
 LICENCE=$(grep "^#- " "${BASH_SOURCE[0]}" | cut -c 4-)
 
@@ -120,5 +119,5 @@ fi
 
 make_dir ${OUTPUT%/*}
 
-$MUTECT --analysis_type MuTect --reference_sequence ${ASSEMBLY}  \
+muTect --analysis_type MuTect --reference_sequence ${ASSEMBLY}  \
     --input_file:normal ${REFERENCE} --input_file:tumor ${INPUT} --out ${OUTPUT} 
