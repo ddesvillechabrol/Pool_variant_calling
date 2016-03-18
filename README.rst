@@ -28,7 +28,8 @@ directory.
 You need to copy the config.yaml inside your working directory and change the 
 script_path to indicate where is the "pool_variant_calling" directory.
 Actually, the script is setting for the bic cluster of Institut Pasteur. 
-You must change the path of module source (module_src).
+You must change the path of module source (module_src) to use it on classical
+SGE cluster.
 
 Inside the config.yaml, you need to change different parameter (ref, fastq_dir,
 genome, output).
