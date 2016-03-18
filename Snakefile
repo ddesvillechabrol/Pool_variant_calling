@@ -11,7 +11,7 @@ REF = get_prefixes(config["ref"])
 SPATH = config["script_path"]
 FASTQ_DIR = config["fastq_dir"]
 SAMPLES, = glob_wildcards(join(FASTQ_DIR, '{sample,[^/]+}.fastq.gz'))
-CONTIGS = config["assembly"]
+CONTIGS = config["genome"]
 OUTPUT = config["output"]
 
 # Snakemake --------------------------------------------------------------------
@@ -28,19 +28,37 @@ rule bwa_sample:
         prefix = "mapped_sample/{sample}",
         bam = "mapped_sample/{sample}.bam",
         bai = "mapped_sample/{sample}.bam.bai"
-    run:
-        shell(SPATH + "script/launch_bwa.sh -r {input.contigs} -1 {input.fastq} -o {output.prefix}")
+    params:
+        spath = SPATH,
+        src = config["module_src"],
+        module = config["mapping_module"]
+    shell:
+        """
+        . {params.src}
+        module load {params.module}
+        {params.spath}/script/launch_bwa.sh -r {input.contigs} -1 {input.fastq}\
+        -o {output.prefix}
+        """
 
 rule bwa_ref:
     input:
         fastq = config["ref"],
         contigs = CONTIGS
     output:
-        prefix = "mapped_ref/" + REF,
         bam = "mapped_ref/" + REF + ".bam",
         bai = "mapped_ref/" + REF + ".bam.bai"
-    run:
-        shell(SPATH + "script/launch_bwa.sh -r {input.contigs} -1 {input.fastq} -o {output.prefix}") 
+    params:
+        prefix = "mapped_ref/" + REF,
+        spath = SPATH,
+        src = config["module_src"],
+        module = config["mapping_module"]
+    shell:
+        """
+        . {params.src}
+        module load {params.module}
+        {params.spath}/script/launch_bwa.sh -r {input.contigs} -1 {input.fastq}\ 
+        -o {params.prefix}
+        """ 
 
 rule mutect:
     input:
@@ -49,8 +67,17 @@ rule mutect:
         contigs = CONTIGS
     output:
         "mutect/{sample}.stats.txt"
-    run:
-        shell(SPATH + "script/launch_mutect.sh -a {input.contigs} -r {input.bamr} -i {input.bams} -o {output}")
+    params:
+        spath = SPATH,
+        src = config["module_src"],
+        module = config["mutect_module"]
+    shell:
+        """
+        . {params.src}
+        module load {params.module}
+        {params.spath}/script/launch_mutect.sh -a {input.contigs} 
+        -r {input.bamr} -i {input.bams} -o {output}
+        """
 
 rule merge_results:
     input:
@@ -59,6 +86,10 @@ rule merge_results:
     output:
         OUTPUT
     params:
-        " ".join(config["pipeline_output"]["params"])
-    run:
-        shell(SPATH + "script/pipeline_output.py {params} -r {input.contigs} -i {input.stats} -o {output}")
+        spath = SPATH,
+        filin = " ".join(config["pipeline_output"]["params"])
+    shell:
+        """
+        {params.spath}/script/pipeline_output.py {params.filin} 
+        -r {input.contigs} -i {input.stats} -o {output}
+        """
