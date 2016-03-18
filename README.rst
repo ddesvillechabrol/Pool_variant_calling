@@ -22,8 +22,9 @@ After you download the directory from git, you copy this where you want on the c
     scp -r pool_variant_calling ddesvill@bic.pasteur.fr:~
     chmod 750 -R pool_variant_calling
 
-We assume you have a working directory with a reference genome (fasta), reads of
-a pure sample (fastq) and reads of your pooled sample (fastq) in a directory.
+We will assume you have a working directory with a reference genome (fasta),
+reads of a pure sample (fastq) and reads of your pooled sample (fastq) in a
+directory.
 You need to copy the config.yaml inside your working directory and change the 
 script_path to indicate where is the "pool_variant_calling" directory.
 Actually, the script is setting for the bic cluster of Institut Pasteur. 
