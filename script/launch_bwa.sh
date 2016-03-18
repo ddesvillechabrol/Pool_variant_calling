@@ -1,12 +1,20 @@
 #!/bin/bash
 
 #- ---------------------------------------------------------------------
-#- "THE BEER-WARE LICENSE" (Revision 42):
-#- <d.desvillechabrol@gmail.com> wrote this file. As long as you retain
-#- this notice you can do whatever you want with this stuff. If we meet
-#- some day, and you think this stuff is worth it, you can buy me a beer
-#- in return.
-#- Dimitri Desvillechabrol
+#-    Copyright (C) 2015 Dimitri Desvillechabrol
+#-
+#- This program is free software: you can redistribute it and/or modify
+#- it under the terms of the GNU General Public License as published by
+#- the Free Software Foundation, either version 3 of the License, or
+#- (at your option) any later version.
+#-
+#- This program is distributed in the hope that it will be useful,
+#- but WITHOUT ANY WARRANTY; without even the implied warranty of
+#- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#- GNU General Public License for more details.
+#-
+#- You should have received a copy of the GNU General Public License
+#- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #- ---------------------------------------------------------------------
 
 ## Usage: launch_bwa.sh -r FILE -single FILE -o FILE.bam
@@ -21,11 +29,8 @@
 ##          -2, --file2         Paired input fastq file.
 ## 
 ## You must use this versions of software:
-##          - $BWA          v0.6.2
-##          - $SAMTOOLS     v1.2
-
-BWA=/local/gensoft/exe/bwa/0.6.2/bin/bwa
-SAMTOOLS=/local/gensoft/exe/samtools/1.2/bin/samtools
+##          - bwa          v0.6.2
+##          - samtools     v1.2
 
 mapping_pe(){
     reference=$1
@@ -33,15 +38,15 @@ mapping_pe(){
     read2=$3
     output=$4 # bam of the output
     map_dir=$output"_tmp"
-    $BWA index $reference;
-    $BWA aln -t 8 $reference $read1 > $map_dir"_1.sai"
-    $BWA aln -t 8 $reference $read2 > $map_dir"_2.sai"
-    $BWA sampe -r '@RG\tID:ref\tSM:ref\tPL:ILLUMINA' $reference \
+    bwa index $reference;
+    bwa aln -t 8 $reference $read1 > $map_dir"_1.sai"
+    bwa aln -t 8 $reference $read2 > $map_dir"_2.sai"
+    bwa sampe -r '@RG\tID:ref\tSM:ref\tPL:ILLUMINA' $reference \
                  $map_dir"_1.sai" $map_dir"_2.sai" $read1 $read2 > $map_dir.sam
-    $SAMTOOLS faidx $reference;
-    $SAMTOOLS import $reference.fai $map_dir.sam $map_dir.bam;
-    $SAMTOOLS sort $map_dir.bam $output;
-    $SAMTOOLS index $output.bam;
+    samtools faidx $reference;
+    samtools import $reference.fai $map_dir.sam $map_dir.bam;
+    samtools sort $map_dir.bam $output;
+    samtools index $output.bam;
 }
 
 mapping_se(){
@@ -49,14 +54,14 @@ mapping_se(){
     read1=$2
     output=$3
     map_dir=$output"_tmp"
-    $BWA index $reference;
-    $BWA aln -t 8 $reference $read1 > $map_dir"_1.sai"
-    $BWA samse -r '@RG\tID:ref\tSM:ref\tPL:ILLUMINA' $reference \
+    bwa index $reference;
+    bwa aln -t 8 $reference $read1 > $map_dir"_1.sai"
+    bwa samse -r '@RG\tID:ref\tSM:ref\tPL:ILLUMINA' $reference \
                  $map_dir"_1.sai" $read1 > $map_dir.sam
-    $SAMTOOLS faidx $reference;
-    $SAMTOOLS import $reference.fai $map_dir.sam $map_dir.bam;
-    $SAMTOOLS sort $map_dir.bam $output;
-    $SAMTOOLS index $output.bam;
+    samtools faidx $reference;
+    samtools import $reference.fai $map_dir.sam $map_dir.bam;
+    samtools sort $map_dir.bam $output;
+    samtools index $output.bam;
 }
 
 make_dir() {
