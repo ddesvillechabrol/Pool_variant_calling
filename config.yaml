@@ -1,6 +1,6 @@
 # Script path ------------------------------------------------------------------
-# Path of the pool_variant_calling directory
-script_path: /pasteur/homes/ddesvill/pool_variant_calling/
+# Where are script for the pipeline
+script_path: 
 
 # Files ------------------------------------------------------------------------
 # Fastq of the pure sample
@@ -8,10 +8,16 @@ ref: ERR035980_1.fastq.gz
 # Directory with all fastq of the pools sample
 fastq_dir: ./Fastq/
 # Fasta file of your reference
-assembly: reference.fa
+genome: reference.fa
 # The final output
 output: variant_calling_result.txt
 
+# Config module ----------------------------------------------------------------
+# Path source module
+module_src: /etc/profile.d/pasteur_modules.sh
+# Rules module
+mapping_module: "bwa/0.6.2 samtools/1.2"
+mutect_module: "muTect/1.1.4"
 
 # Pipeline output --------------------------------------------------------------
 # If you have a prokka file add inside params.
