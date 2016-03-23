@@ -76,7 +76,7 @@ rule mutect:
         """
         . {params.src}
         module load {params.module}
-        {params.spath}/script/launch_mutect.sh -a {input.contigs} 
+        {params.spath}/script/launch_mutect.sh -a {input.contigs} \
         -r {input.bamr} -i {input.bams} -o {output}
         """
 
@@ -91,6 +91,6 @@ rule merge_results:
         filin = " ".join(config["pipeline_output"]["params"])
     shell:
         """
-        {params.spath}/script/pipeline_output.py {params.filin} 
+        {params.spath}/script/pipeline_output.py {params.filin} \
         -r {input.contigs} -i {input.stats} -o {output}
         """
