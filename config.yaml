@@ -14,10 +14,11 @@ output: variant_calling_result.txt
 
 # Config module ----------------------------------------------------------------
 # Path source module
-module_src: /etc/profile.d/pasteur_modules.sh
+src_module: /etc/profile.d/pasteur_modules.sh
 # Rules module
 mapping_module: "bwa/0.6.2 samtools/1.2"
 mutect_module: "muTect/1.1.4"
+picard_module: "picard-tools/1.94"
 
 # Pipeline output --------------------------------------------------------------
 # If you have a prokka file add inside params.
