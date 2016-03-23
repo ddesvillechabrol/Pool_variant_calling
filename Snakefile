@@ -7,7 +7,7 @@ configfile: "config.yaml"
 # Define some global variable --------------------------------------------------
 get_prefixes = lambda filename: filename.split(".")[0]
 REF = get_prefixes(config["ref"])
-print(REF)
+PREFIX_FA = get_prefixes(config["genome"])
 
 SPATH = config["script_path"]
 FASTQ_DIR = config["fastq_dir"]
@@ -31,7 +31,7 @@ rule bwa_sample:
     params:
         prefix = "mapped_sample/{sample}",
         spath = SPATH,
-        src = config["module_src"],
+        src = config["src_module"],
         module = config["mapping_module"]
     shell:
         """
@@ -51,7 +51,7 @@ rule bwa_ref:
     params:
         prefix = "mapped_ref/" + REF,
         spath = SPATH,
-        src = config["module_src"],
+        src = config["src_module"],
         module = config["mapping_module"]
     shell:
         """
@@ -61,16 +61,32 @@ rule bwa_ref:
         -1 {input.fastq} -o {params.prefix}
         """ 
 
+rule create_dict:
+    input:
+        ref = CONTIGS
+    output:
+        PREFIX_FA + ".dict"
+    params:
+        src = config["src_module"],
+        picard_module = config["picard_module"],
+    shell:
+        """
+        . {params.src}
+        module load {params.picard_module}
+        CreateSequenceDictionary R={input.ref} O={output}
+        """
+
 rule mutect:
     input:
         bams = "mapped_sample/{sample}.bam",
         bamr = "mapped_ref/" + REF + ".bam",
-        contigs = CONTIGS
+        contigs = CONTIGS,
+        contigs_dict = PREFIX_FA + ".dict"
     output:
         "mutect/{sample}.stats.txt"
     params:
         spath = SPATH,
-        src = config["module_src"],
+        src = config["src_module"],
         module = config["mutect_module"]
     shell:
         """
