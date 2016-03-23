@@ -7,6 +7,7 @@ configfile: "config.yaml"
 # Define some global variable --------------------------------------------------
 get_prefixes = lambda filename: filename.split(".")[0]
 REF = get_prefixes(config["ref"])
+print(REF)
 
 SPATH = config["script_path"]
 FASTQ_DIR = config["fastq_dir"]
@@ -25,10 +26,10 @@ rule bwa_sample:
         fastq = FASTQ_DIR + "/{sample}.fastq.gz",
 	    contigs = CONTIGS
     output:
-        prefix = "mapped_sample/{sample}",
         bam = "mapped_sample/{sample}.bam",
         bai = "mapped_sample/{sample}.bam.bai"
     params:
+        prefix = "mapped_sample/{sample}",
         spath = SPATH,
         src = config["module_src"],
         module = config["mapping_module"]
@@ -36,8 +37,8 @@ rule bwa_sample:
         """
         . {params.src}
         module load {params.module}
-        {params.spath}/script/launch_bwa.sh -r {input.contigs} -1 {input.fastq}\
-        -o {output.prefix}
+        {params.spath}/script/launch_bwa.sh -r {input.contigs} \
+        -1 {input.fastq} -o {params.prefix}
         """
 
 rule bwa_ref:
@@ -56,8 +57,8 @@ rule bwa_ref:
         """
         . {params.src}
         module load {params.module}
-        {params.spath}/script/launch_bwa.sh -r {input.contigs} -1 {input.fastq}\ 
-        -o {params.prefix}
+        {params.spath}/script/launch_bwa.sh -r {input.contigs} \
+        -1 {input.fastq} -o {params.prefix}
         """ 
 
 rule mutect:
