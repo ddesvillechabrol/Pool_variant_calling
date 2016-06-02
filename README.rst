@@ -20,8 +20,7 @@ After you download the directory from git, you copy this where you want on the c
 
 ::
 
-    scp -r pool_variant_calling ddesvill@bic.pasteur.fr:~
-    chmod 750 -R pool_variant_calling
+    git clone https://github.com/ddesvillechabrol/pool_variant_calling.git
 
 We will assume you have a working directory with a reference genome (fasta),
 reads of a pure sample (fastq) and reads of your pooled sample (fastq) in a
