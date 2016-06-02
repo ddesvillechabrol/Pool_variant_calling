@@ -8,19 +8,13 @@ Installation
 
 ::
 
-    git clone git@github.com:ddesvillechabrol/pool_variant_calling.git
+    git clone https://github.com/ddesvillechabrol/pool_variant_calling.git
 
 We download all necessary file with this command. 
 The workflow need bwa/0.6.2, samtools/1.2 and muTect/1.1.4 available as module on the cluster.
 
 Example to use it on SGE cluster
 ==============================================
-
-After you download the directory from git, you copy this where you want on the cluster.
-
-::
-
-    git clone https://github.com/ddesvillechabrol/pool_variant_calling.git
 
 We will assume you have a working directory with a reference genome (fasta),
 reads of a pure sample (fastq) and reads of your pooled sample (fastq) in a
